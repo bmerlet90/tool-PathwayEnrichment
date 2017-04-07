@@ -5,6 +5,7 @@ import java.net.URI;
 import javax.ws.rs.core.UriBuilder;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
@@ -13,11 +14,14 @@ import com.sun.jersey.api.client.config.DefaultClientConfig;
 
 public class MappingWebService {
 	
-	protected ClientConfig config;
-	protected Client client;
-	protected WebResource Webservice;
+	private ClientConfig config;
+	private Client client;
+	private WebResource Webservice;
 	private String url;
 	
+	/**
+	 * 
+	 */
 	public MappingWebService(){
 		this.url="http://vm-metexplore.toulouse.inra.fr/metExploreWebService/";
 		
@@ -48,32 +52,67 @@ public class MappingWebService {
 		Webservice = this.getClient().resource(uri);
 	}
 	
-	public JsonObject mapReactions(){
+	/**
+	 * 
+	 * @param attribute
+	 * @return
+	 */
+	public JsonObject mapReactions(String attribute, JsonObject input){
 		JsonObject output=new JsonObject();
 		
 		if (this.testConnection()){
-			output.addProperty("success", true);
+			
+			this.Webservice=this.Webservice.path("mapping").path("launch").path("reactions").path(attribute).path("4324");
+			
+			return this.mapInputData(input);
+			
 		}else{
-			output.addProperty("success", true);
+			output.addProperty("success", false);
 			output.addProperty("message", "Unable to connect to the MetExplore web service. Try again later or contact us at 'contact-metexplore@inra.fr'");
 		}
 		
 		return output;
 	}
 	
-	public JsonObject mapMetabolites(){
+	/**
+	 * 
+	 * @param attribute
+	 * @return
+	 */
+	public JsonObject mapMetabolites(String attribute, JsonObject input){
 		JsonObject output=new JsonObject();
 		
 		if (this.testConnection()){
-			output.addProperty("success", true);
+						
+			this.Webservice=this.Webservice.path("mapping").path("launch").path("metabolites").path(attribute).path("4324");
+			
+			return this.mapInputData(input);
+			
 		}else{
-			output.addProperty("success", true);
+			output.addProperty("success", false);
 			output.addProperty("message", "Unable to connect to the MetExplore web service. Try again later or contact us at 'contact-metexplore@inra.fr'");
 		}
 		
 		return output;
 	}
 	
+	
+	private JsonObject mapInputData(JsonObject in){
+		ClientResponse response = this.getWebservice().type("application/json").post(ClientResponse.class, in.toString());
+		if (response.getStatus() != 200) {
+			throw new RuntimeException("Failed : HTTP error code : "
+					+ response.getStatus());
+		}
+		
+		return (JsonObject)new JsonParser().parse(response.getEntity(String.class));
+	}
+	
+	
+	
+	/**
+	 * Used internally to test the connection to the webservice
+	 * @return
+	 */
 	private boolean testConnection(){
 		WebResource data = this.getWebservice().path("biosources").path("1363");
 		
@@ -84,7 +123,7 @@ public class MappingWebService {
 		return true;
 	}
 	
-	protected URI getBaseURI() {
+	private URI getBaseURI() {
 		return UriBuilder.fromUri(this.url).build();
 	}
 	

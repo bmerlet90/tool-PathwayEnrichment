@@ -1,0 +1,26 @@
+{
+	"mappingName":"test",
+	"conditions":[
+		{
+			"conditionName":"3d",
+			"data":[
+				{"dbIdentifier":"R_HSD17B2r", "value": 0.5},
+				{"dbIdentifier":"R_DOGULNO1", "value": 0.5},
+				{"dbIdentifier":"R_2AMACHYD", "value": 0.5},
+				{"dbIdentifier":"R_AATAi", "value": 0.5},
+				{"dbIdentifier":"R_GHMT3", "value": 0.5},
+				{"dbIdentifier":"R_TMLYSOX", "value": 0.5}
+			]
+		},{
+			"conditionName":"30d",
+			"data":[
+				{"dbIdentifier":"R_HSD17B2r", "value": 0.5},
+				{"dbIdentifier":"R_DOGULNO1", "value": 0.5},
+				{"dbIdentifier":"R_2AMACHYD", "value": 0.5},
+				{"dbIdentifier":"R_AATAi", "value": 0.5},
+				{"dbIdentifier":"R_GHMT3", "value": 0.5},
+				{"dbIdentifier":"R_TMLYSOX", "value": 0.5}
+			]
+		}
+	]
+}
